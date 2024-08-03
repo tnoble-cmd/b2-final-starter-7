@@ -1,4 +1,11 @@
 FactoryBot.define do
+  factory :coupon do
+    name { "MyString" }
+    code { "MyString" }
+    discount { "9.99" }
+    discount_type { "MyString" }
+  end
+
   factory :customer do
     first_name {Faker::Name.first_name}
     last_name {Faker::Dessert.variety}
