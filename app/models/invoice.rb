@@ -7,7 +7,8 @@ class Invoice < ApplicationRecord
   has_many :invoice_items
   has_many :items, through: :invoice_items
   has_many :merchants, through: :items
-  has_one :coupon
+  has_many :coupon_invoices
+  has_many :coupons, through: :coupon_invoices
 
   enum status: [:cancelled, :in_progress, :completed]
 

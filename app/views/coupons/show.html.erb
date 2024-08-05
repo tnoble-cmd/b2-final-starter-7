@@ -1,3 +1,11 @@
 <%= render partial: "shared/nav" %>
 
 <h1>Coupon: <%= @coupon.name %></h1>
+
+<div id = "coupon-section">
+    <p><strong>Name:</strong><%= @coupon.name %> </p>
+    <p><strong>Code:</strong> <%= @coupon.code %></p>
+    <p><strong>Discount:</strong><%=@coupon.discount_type%> <%= @coupon.discount %></p>
+    <p><strong>Status:</strong> <%= @coupon.status %></p>
+    <p><strong>Times Used:</strong> <%= @coupon.times_used %></p>
+</div>

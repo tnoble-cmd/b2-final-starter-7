@@ -1,4 +1,9 @@
 FactoryBot.define do
+  factory :coupon_invoice do
+    coupon { nil }
+    invoice { nil }
+  end
+
   factory :coupon do
     name { "MyString" }
     code { "MyString" }
