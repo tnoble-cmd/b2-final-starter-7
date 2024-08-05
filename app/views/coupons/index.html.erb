@@ -1,0 +1,16 @@
+<%= render partial: "shared/nav" %>
+
+<h1>Coupons</h1>
+
+<div id = "index-coupons">
+    <% @coupons.each do |coupon| %>
+        <div id = "coupon">
+            Coupon: <%=link_to coupon.name, merchant_coupon_path(@merchant, coupon) %>
+            Ammount Off: <%= coupon.discount %>
+        </div>
+    <% end %>
+</div>
+
+<div id = "new-coupon">
+    <%= link_to "Create New Coupon", new_merchant_coupon_path(@merchant) %>
+</div>
