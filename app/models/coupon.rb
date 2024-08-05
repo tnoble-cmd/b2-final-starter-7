@@ -12,4 +12,8 @@ class Coupon < ApplicationRecord
   def times_used
     invoices.where(status: 'completed').count
   end
+
+  def deactivate
+    update(status: :inactive)
+  end
 end

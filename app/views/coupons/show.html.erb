@@ -9,3 +9,9 @@
     <p><strong>Status:</strong> <%= @coupon.status %></p>
     <p><strong>Times Used:</strong> <%= @coupon.times_used %></p>
 </div>
+
+<div id = "coupon-status-button">
+    <% if @coupon.status == 'active' %>
+        <%= button_to "Deactivate", merchant_coupon_path(@merchant, @coupon), method: :patch %>
+    <% end %>
+</div>
