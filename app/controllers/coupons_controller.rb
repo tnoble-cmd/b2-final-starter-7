@@ -26,9 +26,6 @@ class CouponsController < ApplicationController
       render :new
     elsif @coupon.save
       redirect_to merchant_coupons_path(@merchant), notice: "Coupon created successfully."
-    else
-      flash[:alert] = @coupon.errors.full_messages.to_sentence
-      render :new
     end
   end
 
