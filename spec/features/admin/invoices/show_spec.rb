@@ -17,6 +17,9 @@ describe "Admin Invoices Index Page" do
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
 
+    # visit admin_invoice_path(@i1)
+    @coupon = Coupon.create!(name: "50% off", code: "OFF50", discount: 50, discount_type: "percentage", merchant_id: @m1.id, status: 1)
+    CouponInvoice.create!(coupon_id: @coupon.id, invoice_id: @i1.id)
     visit admin_invoice_path(@i1)
   end
 
@@ -67,6 +70,47 @@ describe "Admin Invoices Index Page" do
 
       expect(current_path).to eq(admin_invoice_path(@i1))
       expect(@i1.status).to eq("completed")
+    end
+  end
+
+  #US8 - As an admin when i visit one of my admin invoice show pages
+  it "displays coupon information if a coupon is applied" do
+    
+
+    within "#admin-coupon" do
+      expect(page).to have_content("Coupon: #{@coupon.name}")
+      expect(page).to have_content("Code: #{@coupon.code}")
+    end
+  end
+
+  it "displays the subtotal for the invoice" do
+    expect(page).to have_content(@i1.subtotal)
+    expect(@i1.subtotal).to eq(30.0)
+  end
+
+  it "displays the grand total for the invoice with a coupon" do
+    
+    expect(page).to have_content(@i1.grand_total(@coupon))
+    expect(@i1.subtotal).to eq(30.0)
+    expect(@i1.grand_total(@coupon)).to eq(15.0)
+  end
+
+  it "displays grand total with coupon dollar discount" do
+    @coupon.update(discount_type: "dollar", discount: 10)
+
+    visit admin_invoice_path(@i1)
+
+    expect(page).to have_content(@i1.grand_total(@coupon))
+    expect(@i1.subtotal).to eq(30.0)
+    expect(@i1.grand_total(@coupon)).to eq(20.0)
+
+  end
+
+  it "displays a message if no coupon is applied" do
+    visit admin_invoice_path(@i2)
+
+    within "#admin-coupon" do
+      expect(page).to have_content("No Coupon Applied")
     end
   end
 end

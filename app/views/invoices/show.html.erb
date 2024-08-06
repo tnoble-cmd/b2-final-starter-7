@@ -15,14 +15,15 @@
   <p>Subtotal: <%= @invoice.subtotal %></p>
   
   <p>Grand Total: <%= @invoice.grand_total(@coupon) %></p>
-
-  <% if @coupon %>
-    <p>Coupon: <%= @coupon.name %></p>
-    <p>Code: <%= @coupon.code %></p>
-  <% else %>
-    <p>No Coupon Applied</p>
-  <% end %>
-
+  <div id = 'coupon-info'>
+    <% if @coupon %>
+      <p>Coupon: <%= @coupon.name %></p>
+      <p>Code: <%= link_to @coupon.code, merchant_coupon_path(@merchant.id, @coupon.id) %></p>
+    <% else %>
+      <p>No Coupon Applied</p>
+    <% end %>
+  </div>
+  
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
   <br>

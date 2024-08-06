@@ -1,5 +1,6 @@
 class Admin::InvoicesController < ApplicationController
   before_action :set_invoice, only: [:show, :edit, :update]
+  before_action :set_coupon, only: [:show]
   def index
     @invoices = Invoice.all
   end
@@ -23,5 +24,9 @@ class Admin::InvoicesController < ApplicationController
 
   def invoice_params
     params.require(:invoice).permit(:status)
+  end
+
+  def set_coupon
+    @coupon = @invoice.coupons.first
   end
 end

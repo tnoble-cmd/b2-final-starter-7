@@ -138,13 +138,20 @@ RSpec.describe "invoices show" do
   it "shows coupon information" do
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
-    expect(page).to have_content(@coupon_1.name)
-    expect(page).to have_content(@coupon_1.code)
+    within "#coupon-info" do
+      expect(page).to have_content(@coupon_1.name)
+      expect(page).to have_content(@coupon_1.code)
+      click_link @coupon_1.code
+    end
+
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_1))
   end
 
   it "shows No Coupon Applied if no coupon is associated" do
     visit merchant_invoice_path(@merchant1, @invoice_2)
 
-    expect(page).to have_content("No Coupon Applied")
+    within "#coupon-info" do
+      expect(page).to have_content("No Coupon Applied")
+    end
   end
 end
