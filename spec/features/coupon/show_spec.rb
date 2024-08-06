@@ -60,4 +60,24 @@ RSpec.describe 'Coupon Show Page' do
     expect(page).to have_content("Coupon deactivated.")
     expect(@coupon_1.reload.status).to eq("inactive")
   end
+
+  #US 5 I see a button to activate the coupon if it is inactive and i do not see the deactivate button
+  it 'has a button to activate the coupon if it is inactive' do
+    @coupon_1.update(status: 0)
+
+    visit merchant_coupon_path(@merchant1, @coupon_1)
+
+    within "#coupon-status-button" do
+      expect(page).to have_button("Activate")
+      expect(page).to_not have_button("Deactivate")
+
+      click_button "Activate"
+      expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon_1))
+
+      expect(@coupon_1.reload.status).to eq("active")
+      expect(page).to have_button("Deactivate")
+    end
+
+    expect(page).to have_content("Coupon activated.")
+  end
 end

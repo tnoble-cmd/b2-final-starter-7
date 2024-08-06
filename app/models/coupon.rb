@@ -16,4 +16,8 @@ class Coupon < ApplicationRecord
   def deactivate
     update(status: :inactive)
   end
+
+  def activate
+    update(status: :active)
+  end
 end

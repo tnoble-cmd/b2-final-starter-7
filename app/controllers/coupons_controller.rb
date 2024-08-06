@@ -34,8 +34,17 @@ class CouponsController < ApplicationController
 
   def update
     @coupon = Coupon.find(params[:id])
-    @coupon.deactivate
-    redirect_to merchant_coupon_path(@coupon.merchant, @coupon), notice: "Coupon deactivated."
+
+    if @coupon.status == "active"
+      @coupon.deactivate
+      redirect_to merchant_coupon_path(@coupon.merchant, @coupon), notice: "Coupon deactivated."
+    else
+      @coupon.activate
+      redirect_to merchant_coupon_path(@coupon.merchant, @coupon), notice: "Coupon activated."
+    end
+
+    # @coupon.deactivate
+    # redirect_to merchant_coupon_path(@coupon.merchant, @coupon), notice: "Coupon deactivated."
   end
 
   private

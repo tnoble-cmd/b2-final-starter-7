@@ -81,8 +81,19 @@ RSpec.describe Coupon, type: :model do
 
     #US 4
     it 'can deactivate a coupon' do
+      @coupon1.activate
+      expect(@coupon1.status).to eq("active")
+
       @coupon1.deactivate
       expect(@coupon1.status).to eq("inactive")
+    end
+
+    #US 5
+    it 'can activate a coupon' do
+      #Upon instantiation, @coupon1 is inactive
+
+      @coupon1.activate
+      expect(@coupon1.status).to eq("active")
     end
 	end
 end
