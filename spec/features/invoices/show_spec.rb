@@ -51,6 +51,9 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
+    @coupon_1 = Coupon.create!(name: "50% off", code: "OFF50", discount: 50, discount_type: "percentage", merchant_id: @merchant1.id, status: 1)
+    CouponInvoice.create!(coupon_id: @coupon_1.id, invoice_id: @invoice_1.id)
   end
 
   it "shows the invoice information" do
@@ -100,4 +103,35 @@ RSpec.describe "invoices show" do
     end
   end
 
+  #US7 - As a merchant i see the subtotal without included discounts
+  it "shows the subtotal for this invoice" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+      expect(page).to have_content(@invoice_1.subtotal)
+      expect(@invoice_1.subtotal).to eq(162.0)
+  end
+
+  it "shows the grand total for this invoice with a coupon (associated)" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content(@invoice_1.grand_total(@coupon_1))
+    #subtotal is 162.0, from (72) ii_1 + (90) ii_11 (invoice_items)
+    expect(@invoice_1.subtotal).to eq(162.0)
+
+    #grand total should then be 162.0 - (162.0 * 0.5) = 81.0
+    expect(@invoice_1.grand_total(@coupon_1)).to eq(81.0)
+  end
+
+  it "shows the grand total for this invoice without a coupon" do
+    #has no coupon associated, and without conditional block in grand_total method, it would error out. Undefined .discount in method...
+    visit merchant_invoice_path(@merchant1, @invoice_2)
+
+    expect(page).to have_content(@invoice_2.subtotal)
+
+    #subtotal is 10.0, from (10)*li2 (invoice_items)
+    expect(@invoice_2.subtotal).to eq(10.0)
+
+    #grand total should then be 10.0, hitting else contitional in the method. Returning subtotal.
+    expect(@invoice_2.grand_total(nil)).to eq(10.0)
+  end
 end
