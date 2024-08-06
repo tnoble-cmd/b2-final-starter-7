@@ -95,5 +95,23 @@ RSpec.describe Coupon, type: :model do
       @coupon1.activate
       expect(@coupon1.status).to eq("active")
     end
+
+		#US 6
+		it 'shows status of active coupons' do
+			#@coupon1 is inactive
+			coupon2 = create(:coupon, name: "Coupon 2", code: "54321", discount: 20, discount_type: "percent", merchant: @merchant1, status: "active")
+			coupon3 = create(:coupon, name: "Coupon 3", code: "ABCDE", discount: 30, discount_type: "percent", merchant: @merchant1, status: "active")
+
+
+			expect(Coupon.active_coupons).to eq([coupon2, coupon3])
+		end
+
+		it 'shows status of inactive coupons' do
+			#@coupon1 is inactive
+			coupon2 = create(:coupon, name: "Coupon 2", code: "54321", discount: 20, discount_type: "percent", merchant: @merchant1, status: "active")
+			coupon3 = create(:coupon, name: "Coupon 3", code: "ABCDE", discount: 30, discount_type: "percent", merchant: @merchant1, status: "inactive")
+
+			expect(Coupon.inactive_coupons).to eq([@coupon1, coupon3])
+		end
 	end
 end

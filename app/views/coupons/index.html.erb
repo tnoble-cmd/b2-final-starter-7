@@ -2,9 +2,20 @@
 
 <h1>Coupons</h1>
 
+<h3> Active Coupons </h3>
 <div id = "index-coupons">
-    <% @coupons.each do |coupon| %>
+    <% @coupons.active_coupons.each do |coupon| %>
         <div id = "coupon">
+            Coupon: <%=link_to coupon.name, merchant_coupon_path(@merchant, coupon) %>
+            Ammount Off: <%= coupon.discount %>
+        </div>
+    <% end %>
+</div>
+
+<h3> Inactive Coupons </h3>
+<div id = "index-coupons-inactive">
+    <% @coupons.inactive_coupons.each do |coupon| %>
+        <div id = "coupon-inactive">
             Coupon: <%=link_to coupon.name, merchant_coupon_path(@merchant, coupon) %>
             Ammount Off: <%= coupon.discount %>
         </div>

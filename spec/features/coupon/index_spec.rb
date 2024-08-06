@@ -41,6 +41,7 @@ RSpec.describe 'Coupon Index Page' do
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
     @coupon1 = Coupon.create(name: "10 percent", code: "10OFF", discount: 10, discount_type: "percent", merchant_id: @merchant1.id, invoice_id: @invoice_1.id)
+    @coupon2 = Coupon.create(name: "5 dollars off", code: "5OFF", discount: 5, discount_type: "dollar", merchant_id: @merchant1.id, invoice_id: @invoice_2.id, status: 1)
   end
 
   #US 1
@@ -52,19 +53,37 @@ RSpec.describe 'Coupon Index Page' do
     expect(current_path).to eq(merchant_coupons_path(@merchant1.id))
 
     within "#index-coupons" do
-      expect(page).to have_content(@coupon1.name)
-      expect(page).to have_content(@coupon1.discount)
+      expect(page).to have_content(@coupon2.name)
+      expect(page).to have_content(@coupon2.discount)
     end
 
     within "#coupon" do
-      click_link @coupon1.name
+      click_link @coupon2.name
     end
 
-    expect(current_path).to eq(merchant_coupon_path(@merchant1.id, @coupon1.id))
+    expect(current_path).to eq(merchant_coupon_path(@merchant1.id, @coupon2.id))
   end
 
-  #US 2
-  it "Shows a link to create a new coupon" do
+  #US 6 Merchant Coupon Index Sorted by active and inactive
+  it "shows the active coupons in #index-coupons" do
+    visit merchant_coupons_path(@merchant1.id)
 
+    within "#index-coupons" do
+      expect(page).to have_content(@coupon2.name)
+      expect(page).to have_content(@coupon2.discount)
+      expect(page).to_not have_content(@coupon1.name)
+      expect(page).to_not have_content(@coupon1.discount)
+    end
+  end
+
+  it "shows the inactive coupons in #index-coupons-inactive" do
+    visit merchant_coupons_path(@merchant1.id)
+
+    within "#index-coupons-inactive" do
+      expect(page).to have_content(@coupon1.name)
+      expect(page).to have_content(@coupon1.discount)
+      expect(page).to_not have_content(@coupon2.name)
+      expect(page).to_not have_content(@coupon2.discount)
+    end
   end
 end

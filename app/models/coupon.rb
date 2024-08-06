@@ -20,4 +20,12 @@ class Coupon < ApplicationRecord
   def activate
     update(status: :active)
   end
+
+  def self.active_coupons
+    where(status: 1)
+  end
+
+  def self.inactive_coupons
+    where(status: 0)
+  end
 end
