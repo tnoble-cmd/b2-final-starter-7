@@ -16,6 +16,13 @@
   
   <p>Grand Total: <%= @invoice.grand_total(@coupon) %></p>
 
+  <% if @coupon %>
+    <p>Coupon: <%= @coupon.name %></p>
+    <p>Code: <%= @coupon.code %></p>
+  <% else %>
+    <p>No Coupon Applied</p>
+  <% end %>
+
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
   <br>

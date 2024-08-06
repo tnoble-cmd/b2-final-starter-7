@@ -134,4 +134,17 @@ RSpec.describe "invoices show" do
     #grand total should then be 10.0, hitting else contitional in the method. Returning subtotal.
     expect(@invoice_2.grand_total(nil)).to eq(10.0)
   end
+
+  it "shows coupon information" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content(@coupon_1.name)
+    expect(page).to have_content(@coupon_1.code)
+  end
+
+  it "shows No Coupon Applied if no coupon is associated" do
+    visit merchant_invoice_path(@merchant1, @invoice_2)
+
+    expect(page).to have_content("No Coupon Applied")
+  end
 end
